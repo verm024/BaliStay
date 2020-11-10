@@ -39,12 +39,13 @@
       placeholder="Alamat Penginapan"
     />
     <input type="file" @change="handleChangeInputFotoPenginapan" />
-    <button @click="addHomestay">Add</button>
+    <button @click="updateHomestay">Add</button>
   </div>
 </template>
 
 <script>
 import firebase from "../firebase";
+import store from "../store";
 import { mapState } from "vuex";
 
 export default {
@@ -58,7 +59,7 @@ export default {
         harga_penginapan: "",
         kota_penginapan: "Badung",
         kamar_tersedia: 0,
-        foto_penginapan: []
+        foto_penginapan: ""
       },
       daftar_kota: [
         "Badung",
@@ -74,7 +75,7 @@ export default {
     };
   },
   methods: {
-    async addHomestay() {
+    async updateHomestay() {
       let dataPenginapan = {
         nama_penginapan: this.form_penginapan.nama_penginapan,
         notelp_penginapan: this.form_penginapan.notelp_penginapan,
@@ -85,21 +86,21 @@ export default {
         kamar_tersedia: this.form_penginapan.kamar_tersedia,
         owner: firebase.db.collection("users").doc(this.currentUser.uid)
       };
-      let docPenginapan;
       try {
-        docPenginapan = await firebase.db
+        await firebase.db
           .collection("penginapan")
-          .add(dataPenginapan);
+          .doc(this.$route.params.id)
+          .update(dataPenginapan);
       } catch (error) {
         console.error(error);
       }
-      if (docPenginapan.id) {
+      if (this.form_penginapan.foto_penginapan != "") {
         try {
           let ref = firebase.storage
             .ref()
             .child(
               "/penginapan/" +
-                docPenginapan.id +
+                this.$route.params.id +
                 "." +
                 this.form_penginapan.foto_penginapan.type.split("/")[1]
             );
@@ -107,8 +108,8 @@ export default {
         } catch (error) {
           console.error(error);
         }
-        this.$router.push("/owner");
       }
+      this.$router.push("/owner");
     },
     handleChangeInputFotoPenginapan(e) {
       var files = e.target.files || e.dataTransfer.files;
@@ -122,8 +123,38 @@ export default {
       }
     }
   },
+  async created() {
+    let doc;
+    try {
+      doc = await firebase.db
+        .collection("penginapan")
+        .doc(this.$route.params.id)
+        .get();
+    } catch (error) {
+      console.error(error);
+    }
+    let data = doc.data();
+    this.form_penginapan = data;
+    this.form_penginapan.foto_penginapan = "";
+  },
   computed: {
     ...mapState(["currentUser", "userProfile"])
+  },
+  async beforeRouteEnter(to, from, next) {
+    let doc = await firebase.db
+      .collection("penginapan")
+      .doc(to.params.id)
+      .get();
+    if (doc.exists) {
+      let data = doc.data();
+      if (data.owner.id == store.state.currentUser.uid) {
+        next();
+      } else {
+        next("/owner");
+      }
+    } else {
+      next("/owner");
+    }
   }
 };
 </script>
