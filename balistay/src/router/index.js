@@ -7,6 +7,7 @@ import Login from "../views/Auth/Login";
 import Register from "../views/Auth/Register";
 import DefaultUser from "../views/Dashboard/User";
 import SearchHomestay from "../views/SearchHomestay";
+import DetailHomestay from "../views/DetailHomestay";
 import Owner from "../views/Dashboard/Owner";
 import NewHomestay from "../views/NewHomestay";
 import EditHomestay from "../views/EditHomestay";
@@ -42,6 +43,16 @@ const routes = [
       requiresLogin: true,
       allowedRole: "user",
       title: "Search"
+    }
+  },
+  {
+    path: "/homestay/:id",
+    name: "Homestay",
+    component: DetailHomestay,
+    meta: {
+      requiresLogin: true,
+      allowedRole: "user+owner+admin",
+      title: "Homestay"
     }
   },
   {
