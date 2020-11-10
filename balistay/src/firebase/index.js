@@ -9,8 +9,7 @@ const config = {
   projectId: process.env.VUE_APP_FIREBASE_PROJECTID,
   storageBucket: process.env.VUE_APP_FIREBASE_STORAGEBUCKET,
   messagingSenderId: process.env.VUE_APP_FIREBASE_MESSAGINGSENDERID,
-  appId: process.env.VUE_APP_FIREBASE_APPID,
-  measurementId: process.env.VUE_APP_FIREBASE_MEASUREMENTID
+  appId: process.env.VUE_APP_FIREBASE_APPID
 };
 
 firebase.initializeApp(config);
