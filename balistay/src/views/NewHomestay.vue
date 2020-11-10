@@ -27,6 +27,9 @@
       min="0"
       placeholder="Harga Penginapan (IDR)"
     />
+    <select v-model="form_penginapan.kota_penginapan">
+      <option v-for="(item, index) in daftar_kota" :key="index" :value="item">{{ item }}</option>
+    </select>
     <input
       type="number"
       min="0"
@@ -51,9 +54,21 @@ export default {
         alamat_penginapan: "",
         deskripsi_penginapan: "",
         harga_penginapan: "",
+        kota_penginapan: "Badung",
         kamar_tersedia: 0,
         foto_penginapan: []
-      }
+      },
+      daftar_kota: [
+        "Badung",
+        "Bangli",
+        "Buleleng",
+        "Gianyar",
+        "Jembrana",
+        "Karangasem",
+        "Klungkung",
+        "Tabanan",
+        "Denpasar"
+      ]
     };
   },
   methods: {
@@ -63,6 +78,7 @@ export default {
         notelp_penginapan: this.form_penginapan.notelp_penginapan,
         alamat_penginapan: this.form_penginapan.alamat_penginapan,
         deskripsi_penginapan: this.form_penginapan.deskripsi_penginapan,
+        kota_penginapan: this.form_penginapan.kota_penginapan,
         harga_penginapan: this.form_penginapan.harga_penginapan,
         kamar_tersedia: this.form_penginapan.kamar_tersedia,
         owner: firebase.db.collection("users").doc(this.currentUser.uid)
