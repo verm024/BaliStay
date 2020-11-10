@@ -7,6 +7,7 @@ import Login from "../views/Auth/Login";
 import Register from "../views/Auth/Register";
 import DefaultUser from "../views/Dashboard/User";
 import Owner from "../views/Dashboard/Owner";
+import NewHomestay from "../views/NewHomestay";
 import Transport from "../views/Dashboard/Transport";
 import Admin from "../views/Dashboard/Admin";
 
@@ -39,6 +40,16 @@ const routes = [
       requiresLogin: true,
       allowedRole: "owner",
       title: "Dashboard"
+    }
+  },
+  {
+    path: "/new-homestay",
+    name: "New Homestay",
+    component: NewHomestay,
+    meta: {
+      requiresLogin: true,
+      allowedRole: "owner",
+      title: "New Homestay"
     }
   },
   {
