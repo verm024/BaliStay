@@ -1,5 +1,5 @@
 <template>
-  <div class="new-homestay">
+  <div class="edit-homestay">
     Form tambah penginapan
     <input
       type="text"
@@ -82,8 +82,8 @@ export default {
         alamat_penginapan: this.form_penginapan.alamat_penginapan,
         deskripsi_penginapan: this.form_penginapan.deskripsi_penginapan,
         kota_penginapan: this.form_penginapan.kota_penginapan,
-        harga_penginapan: this.form_penginapan.harga_penginapan,
-        kamar_tersedia: this.form_penginapan.kamar_tersedia,
+        harga_penginapan: parseInt(this.form_penginapan.harga_penginapan),
+        kamar_tersedia: parseInt(this.form_penginapan.kamar_tersedia),
         owner: firebase.db.collection("users").doc(this.currentUser.uid)
       };
       try {

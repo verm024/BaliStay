@@ -6,6 +6,7 @@ import store from "../store";
 import Login from "../views/Auth/Login";
 import Register from "../views/Auth/Register";
 import DefaultUser from "../views/Dashboard/User";
+import SearchHomestay from "../views/SearchHomestay";
 import Owner from "../views/Dashboard/Owner";
 import NewHomestay from "../views/NewHomestay";
 import EditHomestay from "../views/EditHomestay";
@@ -31,6 +32,16 @@ const routes = [
       requiresLogin: true,
       allowedRole: "user",
       title: "Dashboard"
+    }
+  },
+  {
+    path: "/search",
+    name: "Search",
+    component: SearchHomestay,
+    meta: {
+      requiresLogin: true,
+      allowedRole: "user",
+      title: "Search"
     }
   },
   {
