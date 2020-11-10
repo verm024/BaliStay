@@ -5,6 +5,7 @@ import router from "./router";
 import store from "./store";
 import { firestorePlugin } from "vuefire";
 import firebase from "./firebase";
+import vuetify from "./plugins/vuetify";
 
 Vue.config.productionTip = false;
 Vue.use(firestorePlugin);
@@ -24,6 +25,7 @@ firebase.auth.onAuthStateChanged(async user => {
     app = new Vue({
       router,
       store,
+      vuetify,
       render: h => h(App)
     }).$mount("#app");
   }
