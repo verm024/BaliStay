@@ -73,14 +73,28 @@ export default {
       if (this.userProfile.role == "owner") {
         dataPemesanan.status_pembayaran = "paid";
       }
+      let data;
       try {
-        await firebase.db
+        data = await firebase.db
           .collection("penginapan")
           .doc(this.$route.params.id)
           .collection("pemesanan")
           .add(dataPemesanan);
       } catch (error) {
         console.error(error);
+      }
+      if (data.id) {
+        await firebase.db
+          .collection("users")
+          .doc(this.currentUser.uid)
+          .collection("history")
+          .add({
+            pemesanan: firebase.db
+              .collection("penginapan")
+              .doc(this.$route.params.id)
+              .collection("pemesanan")
+              .doc(data.id)
+          });
       }
       this.$router.push("/user");
     },
@@ -93,10 +107,12 @@ export default {
       ) {
         this.daftar_pemesanan.forEach(element => {
           if (element.tanggal_mulai_pesanan && element.tanggal_akhir_pesanan) {
-            let currentMulaiDate =
-              new Date(this.form_pemesanan.tanggal_mulai_pesanan) / 1000;
-            let currentAkhirDate =
-              new Date(this.form_pemesanan.tanggal_akhir_pesanan) / 1000;
+            let temp = new Date(this.form_pemesanan.tanggal_mulai_pesanan);
+            temp.setHours(12, 0, 0, 0);
+            let currentMulaiDate = temp / 1000;
+            temp = new Date(this.form_pemesanan.tanggal_akhir_pesanan);
+            temp.setHours(12, 0, 0, 0);
+            let currentAkhirDate = temp / 1000;
             let elementMulaiDate = element.tanggal_mulai_pesanan.seconds;
             let elementAkhirDate = element.tanggal_akhir_pesanan.seconds;
             if (
@@ -107,12 +123,12 @@ export default {
               this.available = false;
             } else if (
               currentMulaiDate >= elementMulaiDate &&
-              currentMulaiDate <= elementAkhirDate
+              currentMulaiDate < elementAkhirDate
             ) {
               // Tanggal mulai pesanan ada di antara yang sudah ada
               this.available = false;
             } else if (
-              currentAkhirDate >= elementMulaiDate &&
+              currentAkhirDate > elementMulaiDate &&
               currentAkhirDate <= elementAkhirDate
             ) {
               // Tanggal akhir pesanan ada di antara yang sudah ada
@@ -165,7 +181,7 @@ export default {
   },
   async updated() {
     this.daftar_pemesanan.forEach(async element => {
-      if (element.tanggal_akhir_pesanan.seconds > firebase.timestamp.seconds) {
+      if (element.tanggal_akhir_pesanan.seconds < firebase.timestamp.seconds) {
         try {
           await firebase.db
             .collection("penginapan")
