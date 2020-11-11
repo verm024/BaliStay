@@ -32,12 +32,6 @@
         item
       }}</option>
     </select>
-    <input
-      type="number"
-      min="0"
-      v-model="form_penginapan.kamar_tersedia"
-      placeholder="Alamat Penginapan"
-    />
     <input type="file" @change="handleChangeInputFotoPenginapan" />
     <button @click="updateHomestay">Add</button>
   </div>
@@ -58,7 +52,6 @@ export default {
         deskripsi_penginapan: "",
         harga_penginapan: "",
         kota_penginapan: "Badung",
-        kamar_tersedia: 0,
         foto_penginapan: ""
       },
       daftar_kota: [
@@ -83,7 +76,6 @@ export default {
         deskripsi_penginapan: this.form_penginapan.deskripsi_penginapan,
         kota_penginapan: this.form_penginapan.kota_penginapan,
         harga_penginapan: parseInt(this.form_penginapan.harga_penginapan),
-        kamar_tersedia: parseInt(this.form_penginapan.kamar_tersedia),
         owner: firebase.db.collection("users").doc(this.currentUser.uid)
       };
       try {

@@ -48,8 +48,7 @@ export default {
     let ref;
     try {
       ref = firebase.db
-        .collection("penginapan")
-        .where("kamar_tersedia", ">=", 1);
+        .collection("penginapan");
       ref.onSnapshot(snapshot => {
         snapshot.forEach(doc => {
           const data = doc.data();
