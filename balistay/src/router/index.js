@@ -148,7 +148,11 @@ router.beforeEach((to, from, next) => {
   let currentUser = firebase.auth.currentUser;
   let requiresLogin = to.matched.some(x => x.meta.requiresLogin);
   if (to.name == "Unavailable") {
-    next("/" + store.state.userProfile.role);
+    if (currentUser) {
+      next("/" + store.state.userProfile.role);
+    } else {
+      next("/");
+    }
   } else {
     if (currentUser) {
       if (requiresLogin) {
