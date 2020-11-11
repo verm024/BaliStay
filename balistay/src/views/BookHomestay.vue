@@ -163,6 +163,22 @@ export default {
       }
     }
   },
+  async updated() {
+    this.daftar_pemesanan.forEach(async element => {
+      if (element.tanggal_akhir_pesanan.seconds > firebase.timestamp.seconds) {
+        try {
+          await firebase.db
+            .collection("penginapan")
+            .doc(this.$route.params.id)
+            .collection("pemesanan")
+            .doc(element.id)
+            .update({ status_pesanan: "finished" });
+        } catch (error) {
+          console.error(error);
+        }
+      }
+    });
+  },
   async beforeRouteEnter(to, from, next) {
     let doc = await firebase.db
       .collection("penginapan")
