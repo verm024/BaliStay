@@ -18,7 +18,7 @@
           Home
         </v-btn>
       </router-link>
-      <router-link v-if="currentUser" :to="'/' + userProfile.role">
+      <router-link v-if="currentUser && userProfile" :to="'/' + userProfile.role">
         <v-btn text>
           Dashboard
         </v-btn>
