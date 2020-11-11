@@ -117,7 +117,7 @@ export default {
     }
   },
   computed: {
-    ...mapState(["currentUser"])
+    ...mapState(["currentUser", "userProfile"])
   }
 };
 </script>
