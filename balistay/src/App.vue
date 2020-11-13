@@ -2,14 +2,16 @@
   <v-app>
     <v-app-bar app color="white" flat>
       <div class="d-flex align-center">
-        <v-img
-          alt="Vuetify Logo"
-          class="shrink mr-2"
-          contain
-          src="@/assets/logo-balistay.png"
-          transition="scale-transition"
-          width="120"
-        />
+        <router-link v-if="currentUser" to="/">
+          <v-img
+            alt="Vuetify Logo"
+            class="shrink mr-2"
+            contain
+            src="@/assets/logo-balistay.png"
+            transition="scale-transition"
+            width="120"
+          />
+        </router-link>
       </div>
 
       <v-spacer></v-spacer>
@@ -18,7 +20,15 @@
           Home
         </v-btn>
       </router-link>
-      <router-link v-if="currentUser && userProfile" :to="'/' + userProfile.role">
+      <router-link v-if="currentUser" to="/search">
+        <v-btn text>
+          Search
+        </v-btn>
+      </router-link>
+      <router-link
+        v-if="currentUser && userProfile"
+        :to="'/' + userProfile.role"
+      >
         <v-btn text>
           Dashboard
         </v-btn>
@@ -100,8 +110,8 @@ export default {
         { name: "About", to: "/about" },
         { name: "Contact", to: "/contact" },
         { name: "FAQ", to: "/faq" },
-        { name: "Search Homestay", to: "/search" }
-      ]
+        { name: "Search Homestay", to: "/search" },
+      ],
     };
   },
   methods: {
@@ -114,11 +124,11 @@ export default {
       this.$store.commit("setCurrentUser", null);
       this.$store.commit("setUserProfile", null);
       this.$router.push("/login");
-    }
+    },
   },
   computed: {
-    ...mapState(["currentUser", "userProfile"])
-  }
+    ...mapState(["currentUser", "userProfile"]),
+  },
 };
 </script>
 

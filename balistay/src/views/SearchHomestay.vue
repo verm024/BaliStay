@@ -11,10 +11,37 @@
       placeholder="Price max"
       v-model="filter.max_harga"
     />
-    <div v-for="(item, index) in filterList" :key="index">
+    <!-- <div v-for="(item, index) in filterList" :key="index">
       {{ item.nama_penginapan }}
       <br />
       Kota: {{ item.kota_penginapan }} Harga: {{ item.harga_penginapan }}
+    </div> -->
+    <br />
+    <div v-for="(item, index) in filterList" :key="index">
+      <v-card class="mx-auto mb-5" max-width="800" outlined>
+        <v-list-item four-line>
+          <v-list-item-avatar tile size="100" color="grey"></v-list-item-avatar>
+          <v-list-item-content>
+            <!-- <div class="overline mb-4">
+              OVERLINE
+            </div> -->
+            <v-list-item-title class="headline">
+              {{ item.nama_penginapan }}
+            </v-list-item-title>
+            <v-list-item-subtitle>{{
+              item.kota_penginapan
+            }}</v-list-item-subtitle>
+            <v-list-item-subtitle>{{
+              item.harga_penginapan
+            }}</v-list-item-subtitle>
+          </v-list-item-content>
+          <router-link :to="'/homestay/' + item.id">
+            <v-btn class="white--text" color="#0EBEE4">
+              Book Homestay
+            </v-btn>
+          </router-link>
+        </v-list-item>
+      </v-card>
     </div>
   </div>
 </template>
@@ -37,19 +64,19 @@ export default {
           "Karangasem",
           "Klungkung",
           "Tabanan",
-          "Denpasar"
+          "Denpasar",
         ],
-        max_harga: 0
+        max_harga: 0,
       },
-      daftar_penginapan: []
+      daftar_penginapan: [],
     };
   },
   async created() {
     let ref;
     try {
       ref = firebase.db.collection("penginapan");
-      ref.onSnapshot(snapshot => {
-        snapshot.forEach(doc => {
+      ref.onSnapshot((snapshot) => {
+        snapshot.forEach((doc) => {
           const data = doc.data();
           this.daftar_penginapan.push(data);
         });
@@ -60,7 +87,7 @@ export default {
   },
   computed: {
     filterList() {
-      return this.daftar_penginapan.filter(element => {
+      return this.daftar_penginapan.filter((element) => {
         if (
           this.filter.current == "All" &&
           parseInt(this.filter.max_harga) == 0
@@ -86,8 +113,8 @@ export default {
           return this.filter.current == element.kota_penginapan;
         }
       });
-    }
-  }
+    },
+  },
 };
 </script>
 
