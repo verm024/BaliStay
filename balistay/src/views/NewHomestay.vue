@@ -96,6 +96,18 @@ export default {
                 this.form_penginapan.foto_penginapan.type.split("/")[1]
             );
           let task = await ref.put(this.form_penginapan.foto_penginapan);
+          let url = await task.ref.getDownloadURL();
+          console.log(url);
+          if (url) {
+            try {
+              await firebase.db
+                .collection("penginapan")
+                .doc(docPenginapan.id)
+                .update({ image: url });
+            } catch (error) {
+              console.error(error);
+            }
+          }
         } catch (error) {
           console.error(error);
         }

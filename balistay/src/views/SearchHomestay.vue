@@ -15,7 +15,9 @@
     <div v-for="(item, index) in filterList" :key="index">
       <v-card class="mx-auto mb-5" max-width="800" outlined>
         <v-list-item four-line>
-          <v-list-item-avatar tile size="100" color="grey"></v-list-item-avatar>
+          <v-list-item-avatar tile size="100" color="grey">
+            <v-img :src="item.image" />
+          </v-list-item-avatar>
           <v-list-item-content>
             <!-- <div class="overline mb-4">
               OVERLINE
