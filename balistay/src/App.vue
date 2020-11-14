@@ -133,11 +133,19 @@ export default {
 </script>
 
 <style scoped>
+#app {
+  padding-top: 50px;
+}
+
 a {
   text-decoration: none;
 }
 
 a.router-link-exact-active button {
   color: #0ebee4;
+}
+
+.v-footer {
+  margin-top: 100px;
 }
 </style>
