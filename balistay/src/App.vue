@@ -110,8 +110,8 @@ export default {
         { name: "About", to: "/about" },
         { name: "Contact", to: "/contact" },
         { name: "FAQ", to: "/faq" },
-        { name: "Search Homestay", to: "/search" },
-      ],
+        { name: "Search Homestay", to: "/search" }
+      ]
     };
   },
   methods: {
@@ -124,11 +124,11 @@ export default {
       this.$store.commit("setCurrentUser", null);
       this.$store.commit("setUserProfile", null);
       this.$router.push("/login");
-    },
+    }
   },
   computed: {
-    ...mapState(["currentUser", "userProfile"]),
-  },
+    ...mapState(["currentUser", "userProfile"])
+  }
 };
 </script>
 

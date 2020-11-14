@@ -11,11 +11,6 @@
       placeholder="Price max"
       v-model="filter.max_harga"
     />
-    <!-- <div v-for="(item, index) in filterList" :key="index">
-      {{ item.nama_penginapan }}
-      <br />
-      Kota: {{ item.kota_penginapan }} Harga: {{ item.harga_penginapan }}
-    </div> -->
     <br />
     <div v-for="(item, index) in filterList" :key="index">
       <v-card class="mx-auto mb-5" max-width="800" outlined>
@@ -31,9 +26,9 @@
             <v-list-item-subtitle>{{
               item.kota_penginapan
             }}</v-list-item-subtitle>
-            <v-list-item-subtitle>{{
-              item.harga_penginapan
-            }}</v-list-item-subtitle>
+            <v-list-item-subtitle
+              >$ {{ item.harga_penginapan }}</v-list-item-subtitle
+            >
           </v-list-item-content>
           <router-link :to="'/homestay/' + item.id">
             <v-btn class="white--text" color="#0EBEE4">
@@ -64,22 +59,21 @@ export default {
           "Karangasem",
           "Klungkung",
           "Tabanan",
-          "Denpasar",
+          "Denpasar"
         ],
-        max_harga: 0,
+        max_harga: 0
       },
-      daftar_penginapan: [],
+      daftar_penginapan: []
     };
   },
   async created() {
     let ref;
     try {
-      ref = firebase.db.collection("penginapan");
-      ref.onSnapshot((snapshot) => {
-        snapshot.forEach((doc) => {
-          const data = doc.data();
-          this.daftar_penginapan.push(data);
-        });
+      let doc = await firebase.db.collection("penginapan").get();
+      doc.forEach(element => {
+        let data = element.data();
+        data.id = element["id"];
+        this.daftar_penginapan.push(data);
       });
     } catch (error) {
       console.error(error);
@@ -87,7 +81,7 @@ export default {
   },
   computed: {
     filterList() {
-      return this.daftar_penginapan.filter((element) => {
+      return this.daftar_penginapan.filter(element => {
         if (
           this.filter.current == "All" &&
           parseInt(this.filter.max_harga) == 0
@@ -113,8 +107,8 @@ export default {
           return this.filter.current == element.kota_penginapan;
         }
       });
-    },
-  },
+    }
+  }
 };
 </script>
 
