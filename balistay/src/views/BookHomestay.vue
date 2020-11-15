@@ -1,30 +1,123 @@
 <template>
-  <div class="book-homestay">
-    Page book homestay
-
-    <input type="text" v-model="form_pemesanan.nama_pemesan" />
-    <input type="text" v-model="form_pemesanan.notelp_pemesan" />
-    <!-- Tanggal mulai = tanggal check in, tanggal akhir = tanggal check out -->
-    <input
-      type="date"
-      @change="handleDateChange"
-      :min="Date.now()"
-      v-model="form_pemesanan.tanggal_mulai_pesanan"
-    />
-    <input
-      type="date"
-      @change="handleDateChange"
-      :min="form_pemesanan.tanggal_mulai_pesanan"
-      v-model="form_pemesanan.tanggal_akhir_pesanan"
-    />
-    <input type="number" v-model="form_pemesanan.harga_total" disabled />
-    <button @click="book">Book Now!</button>
-
-    <div v-if="available">
-      Tersedia
+  <div class="book-homestay container">
+    <div class="header">
+      <v-row class="align-center">
+        <v-col cols="7">
+          <h1 class="title">{{ data_penginapan.nama_penginapan }}</h1>
+          <div class="kota">
+            <span>{{ data_penginapan.kota_penginapan }}, Bali, Indonesia</span>
+          </div>
+          <div class="price">
+            <span>Price: ${{ data_penginapan.harga_penginapan }}</span>
+          </div>
+          <div class="button">
+            <v-btn class="white--text" tile color="#0EBEE4" elevation="0">
+              <v-icon left>
+                mdi-email-outline
+              </v-icon>
+              Contact Homestay
+            </v-btn>
+          </div>
+        </v-col>
+        <v-col cols="5">
+          <v-img :src="data_penginapan.image" />
+        </v-col>
+      </v-row>
     </div>
-    <div v-else>
-      Tidak tersedia
+
+    <div class="book-info">
+      <v-card class="card-info">
+        <v-card-text>
+          <v-row>
+            <v-col cols="6">
+              <v-text-field
+                label="FullName"
+                outlined
+                v-model="form_pemesanan.nama_pemesan"
+              ></v-text-field>
+            </v-col>
+          </v-row>
+          <v-row>
+            <v-col cols="4">
+              <v-text-field
+                label="Phone Number"
+                outlined
+                v-model="form_pemesanan.notelp_pemesan"
+              ></v-text-field>
+            </v-col>
+          </v-row>
+          <v-row style="height: 86px">
+            <v-col cols="12">
+              <label>Date</label>
+              <br />
+              <input
+                class="mr-5"
+                type="date"
+                @change="handleDateChange"
+                :min="Date.now()"
+                v-model="form_pemesanan.tanggal_mulai_pesanan"
+              />
+              to
+              <input
+                class="ml-5"
+                type="date"
+                @change="handleDateChange"
+                :min="form_pemesanan.tanggal_mulai_pesanan"
+                v-model="form_pemesanan.tanggal_akhir_pesanan"
+              />
+            </v-col>
+          </v-row>
+          <v-row>
+            <v-col cols="3">
+              <v-text-field
+                label="Price"
+                outlined
+                v-model="form_pemesanan.harga_total"
+                disabled
+              ></v-text-field>
+            </v-col>
+          </v-row>
+          <v-row style="height: 86px">
+            <v-col cols="12">
+              <label>Payment Method</label>
+              <div class="d-flex justify-space-between">
+                <div class="payment-choice">
+                  Go-Pay
+                </div>
+                <div class="payment-choice payment-choice-active">
+                  OVO
+                </div>
+                <div class="payment-choice">
+                  BCA
+                </div>
+                <div class="payment-choice">
+                  Mandiri
+                </div>
+                <div class="payment-choice">
+                  BNI
+                </div>
+              </div>
+            </v-col>
+          </v-row>
+          <v-row style="margin-top: 60px">
+            <v-col class="button text-center" offset="4" cols="4">
+              <v-btn
+                v-if="available"
+                class="white--text"
+                tile
+                color="#0EBEE4"
+                elevation="0"
+                @click="book"
+              >
+                Order
+              </v-btn>
+              <div v-else>
+                Tanggal tidak tersedia
+              </div>
+            </v-col>
+          </v-row>
+        </v-card-text>
+      </v-card>
     </div>
   </div>
 </template>
@@ -46,7 +139,7 @@ export default {
         harga_total: 0
       },
       daftar_pemesanan: [],
-      data_homestay: [],
+      data_penginapan: [],
       available: false
     };
   },
@@ -138,6 +231,9 @@ export default {
             }
           }
         });
+        if (this.daftar_pemesanan.length == 0) {
+          this.available = true;
+        }
         this.calculatePrice();
       }
     },
@@ -148,7 +244,7 @@ export default {
         Math.floor(tanggalAkhir / 1000 - tanggalMulai / 1000) / 86400
       );
       this.form_pemesanan.harga_total =
-        jumlahMalam * this.data_homestay.harga_penginapan;
+        jumlahMalam * this.data_penginapan.harga_penginapan;
     }
   },
   created() {
@@ -169,11 +265,11 @@ export default {
         );
       }
     },
-    get_data_homestay: {
+    get_data_penginapan: {
       immediate: true,
       handler() {
         this.$bind(
-          "data_homestay",
+          "data_penginapan",
           firebase.db.collection("penginapan").doc(this.$route.params.id)
         );
       }
@@ -217,4 +313,74 @@ export default {
 };
 </script>
 
-<style></style>
+<style scoped>
+.title {
+  font-weight: bold !important;
+  font-size: 48px !important;
+  text-transform: uppercase;
+  color: rgba(0, 0, 0, 0.6);
+}
+
+.kota {
+  margin-top: 15px;
+}
+
+.price {
+  margin-top: 20px;
+}
+
+.kota span,
+.price span {
+  font-weight: normal;
+  font-size: 16px;
+  color: rgba(0, 0, 0, 0.4);
+}
+
+.button {
+  margin-top: 40px;
+}
+
+.button a {
+  text-decoration: none;
+}
+
+.button .v-btn {
+  text-transform: capitalize;
+  letter-spacing: unset;
+  font-weight: normal;
+}
+
+.book-info {
+  margin-top: 100px;
+}
+
+.card-info {
+  padding: 30px 70px;
+}
+
+.card-info-title {
+  font-weight: normal;
+  font-size: 18px;
+}
+
+.card-info-text {
+  font-weight: normal;
+  font-size: 16px;
+  color: rgba(0, 0, 0, 0.4);
+}
+
+.payment-choice {
+  width: 100px;
+  height: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #d4d4d4;
+  border-radius: 10px;
+  margin-top: 10px;
+}
+
+.payment-choice-active {
+  border-color: #0ebee4;
+}
+</style>
