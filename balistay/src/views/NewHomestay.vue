@@ -1,39 +1,95 @@
 <template>
-  <div class="new-homestay">
-    Form tambah penginapan
-    <input
-      type="text"
-      v-model="form_penginapan.nama_penginapan"
-      placeholder="Nama Penginapan"
-    />
-    <input
-      type="text"
-      v-model="form_penginapan.notelp_penginapan"
-      placeholder="Nomor Telepon Penginapan"
-    />
-    <input
-      type="text"
-      v-model="form_penginapan.alamat_penginapan"
-      placeholder="Alamat Penginapan"
-    />
-    <input
-      type="text"
-      v-model="form_penginapan.deskripsi_penginapan"
-      placeholder="Deskripsi Penginapan"
-    />
-    <input
-      type="number"
-      v-model="form_penginapan.harga_penginapan"
-      min="0"
-      placeholder="Harga Penginapan (IDR)"
-    />
-    <select v-model="form_penginapan.kota_penginapan">
-      <option v-for="(item, index) in daftar_kota" :key="index" :value="item">{{
-        item
-      }}</option>
-    </select>
-    <input type="file" @change="handleChangeInputFotoPenginapan" />
-    <button @click="addHomestay">Add</button>
+  <div class="new-homestay container">
+    <div class="homestay-info">
+      <v-card class="card-info" elevation="0" tile>
+        <v-card-title class="justify-center title">
+          Add New Homestay
+        </v-card-title>
+        <v-card-text>
+          <v-row>
+            <v-col cols="12">
+              <v-text-field
+                label="Name"
+                outlined
+                v-model="form_penginapan.nama_penginapan"
+              ></v-text-field>
+            </v-col>
+          </v-row>
+          <v-row>
+            <v-col cols="12">
+              <v-text-field
+                label="Phone Number"
+                outlined
+                v-model="form_penginapan.notelp_penginapan"
+              ></v-text-field>
+            </v-col>
+          </v-row>
+          <v-row>
+            <v-col cols="12">
+              <v-text-field
+                label="Address"
+                outlined
+                v-model="form_penginapan.alamat_penginapan"
+              ></v-text-field>
+            </v-col>
+          </v-row>
+          <v-row>
+            <v-col cols="12">
+              <v-textarea
+                label="Description"
+                outlined
+                v-model="form_penginapan.deskripsi_penginapan"
+              ></v-textarea>
+            </v-col>
+          </v-row>
+          <v-row>
+            <v-col cols="12">
+              <v-text-field
+                label="Price (USD)"
+                outlined
+                v-model="form_penginapan.harga_penginapan"
+              ></v-text-field>
+            </v-col>
+          </v-row>
+          <v-row>
+            <v-col cols="12">
+              <v-select
+                v-model="form_penginapan.kota_penginapan"
+                :items="daftar_kota"
+                label="Location"
+                persistent-hint
+                return-object
+                single-line
+                outlined
+              ></v-select>
+            </v-col>
+          </v-row>
+          <v-row>
+            <v-col cols="12">
+              <v-file-input
+                label="Photo"
+                outlined
+                v-model="form_penginapan.foto_penginapan"
+                @change="handleChangeInputFotoPenginapan"
+              ></v-file-input>
+            </v-col>
+          </v-row>
+          <v-row>
+            <v-col class="button text-center" cols="12">
+              <v-btn
+                class="white--text"
+                tile
+                color="#0EBEE4"
+                elevation="0"
+                @click="addHomestay"
+              >
+                Add Homestay
+              </v-btn>
+            </v-col>
+          </v-row>
+        </v-card-text>
+      </v-card>
+    </div>
   </div>
 </template>
 
@@ -114,15 +170,13 @@ export default {
         this.$router.push("/owner");
       }
     },
-    handleChangeInputFotoPenginapan(e) {
-      var files = e.target.files || e.dataTransfer.files;
-      if (!files.length) {
-        return;
-      }
-      if (!files[0].type.includes("image")) {
-        this.form_penginapan.foto_penginapan = "";
-      } else {
-        this.form_penginapan.foto_penginapan = files[0];
+    handleChangeInputFotoPenginapan(files) {
+      if (files) {
+        if (!files.type.includes("image")) {
+          this.form_penginapan.foto_penginapan = undefined;
+        } else {
+          this.form_penginapan.foto_penginapan = files;
+        }
       }
     }
   },
@@ -132,4 +186,16 @@ export default {
 };
 </script>
 
-<style></style>
+<style scoped>
+.title {
+  font-size: 24px !important;
+  margin-bottom: 20px;
+}
+
+.button .v-btn {
+  text-transform: capitalize;
+  letter-spacing: unset;
+  font-weight: normal;
+  width: 100%;
+}
+</style>
