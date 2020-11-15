@@ -9,6 +9,7 @@ import DefaultUser from "../views/Dashboard/User";
 import SearchHomestay from "../views/SearchHomestay";
 import DetailHomestay from "../views/DetailHomestay";
 import BookHomestay from "../views/BookHomestay";
+import BookDetail from "../views/BookDetail";
 import Owner from "../views/Dashboard/Owner";
 import NewHomestay from "../views/NewHomestay";
 import EditHomestay from "../views/EditHomestay";
@@ -64,6 +65,16 @@ const routes = [
       requiresLogin: true,
       allowedRole: "user+owner",
       title: "Book"
+    }
+  },
+  {
+    path: "/book-detail/:id",
+    name: "Book Detail",
+    component: BookDetail,
+    meta: {
+      requiresLogin: true,
+      allowedRole: "user+owner",
+      title: "Book Detail"
     }
   },
   {
