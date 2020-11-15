@@ -192,7 +192,9 @@ export default {
               .doc(this.$route.params.id)
           });
       }
-      this.$router.push("/user");
+      this.$router.push(
+        "/book-detail/" + this.$route.params.id + "+-+" + data.id
+      );
     },
     handleDateChange() {
       if (
