@@ -23,7 +23,7 @@
                 :key="index"
               >
                 <router-link :to="'/homestay/' + item.id">
-                  <v-card width="250">
+                  <v-card width="250" outlined>
                     <v-img :src="item.image" height="150"></v-img>
                     <v-card-text class="text-left">
                       <span class="nama-penginapan">{{
