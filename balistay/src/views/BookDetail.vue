@@ -43,7 +43,7 @@
                 label="Transfer to"
                 outlined
                 disabled
-                value="812087190547"
+                :value="'812087190547 (' + data_pemesanan.metode_pembayaran + ')'"
               ></v-text-field>
             </v-col>
             <v-col cols="5">
