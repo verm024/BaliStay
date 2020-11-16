@@ -20,8 +20,8 @@
           Home
         </v-btn>
       </router-link>
-      <router-link v-if="currentUser" to="/search">
-        <v-btn text>
+      <router-link v-if="currentUser && userProfile" to="/search">
+        <v-btn v-if="userProfile.role == 'user'" text>
           Search
         </v-btn>
       </router-link>

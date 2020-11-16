@@ -77,7 +77,6 @@ export default {
       .collection("penginapan")
       .doc(to.params.id)
       .get();
-    console.log(doc);
     if (doc.exists) {
       next();
     } else {

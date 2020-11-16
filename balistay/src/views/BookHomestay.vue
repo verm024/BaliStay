@@ -303,7 +303,8 @@ export default {
       .get();
     if (doc.exists) {
       if (store.state.userProfile.role == "owner") {
-        if (store.state.currentUser.uid == doc.owner.id) {
+        let data = doc.data();
+        if (store.state.currentUser.uid == data.owner.id) {
           next();
         } else {
           next("/owner");
