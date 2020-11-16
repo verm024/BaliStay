@@ -1,13 +1,13 @@
 <template>
   <v-app>
     <v-app-bar app color="white" flat>
-      <div class="d-flex align-center">
-        <router-link v-if="currentUser" to="/">
+      <div class="ml-10 d-flex align-center">
+        <router-link to="/">
           <v-img
             alt="Vuetify Logo"
-            class="shrink mr-2"
+            class="shrink ml-5 mr-2"
             contain
-            src="@/assets/logo-balistay.png"
+            src="./assets/logo-balistay.png"
             transition="scale-transition"
             width="120"
           />
@@ -33,7 +33,7 @@
           Dashboard
         </v-btn>
       </router-link>
-      <v-btn v-if="currentUser" @click="logout" text>
+      <v-btn class="mr-7" v-if="currentUser" @click="logout" text>
         <span class="mr-2">Logout</span>
         <v-icon>mdi-logout</v-icon>
       </v-btn>
@@ -43,7 +43,7 @@
         </v-btn>
       </router-link>
       <router-link v-if="!currentUser" to="/register">
-        <v-btn text>
+        <v-btn class="mr-7" text>
           Register
         </v-btn>
       </router-link>
@@ -82,7 +82,7 @@
         <v-card-text width="100%" class="white--text pt-0">
           <v-row justify="center" no-gutters>
             <router-link v-for="link in links" :key="link.name" :to="link.to">
-              <v-btn color="white" text rounded class="my-2">
+              <v-btn color="white" text rounded>
                 {{ link.name }}
               </v-btn>
             </router-link>
@@ -110,8 +110,8 @@ export default {
         { name: "About", to: "/about" },
         { name: "Contact", to: "/contact" },
         { name: "FAQ", to: "/faq" },
-        { name: "Search Homestay", to: "/search" }
-      ]
+        { name: "Search Homestay", to: "/search" },
+      ],
     };
   },
   methods: {
@@ -124,11 +124,11 @@ export default {
       this.$store.commit("setCurrentUser", null);
       this.$store.commit("setUserProfile", null);
       this.$router.push("/login");
-    }
+    },
   },
   computed: {
-    ...mapState(["currentUser", "userProfile"])
-  }
+    ...mapState(["currentUser", "userProfile"]),
+  },
 };
 </script>
 
