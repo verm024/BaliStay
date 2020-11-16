@@ -76,7 +76,7 @@
             </v-col>
           </v-row>
           <v-row v-if="transport">
-            <v-col cols="3">
+            <v-col cols="6">
               <v-select
                 v-model="form_pemesanan.transport"
                 :items="daftar_transport"
@@ -92,11 +92,12 @@
             </v-col>
           </v-row>
           <v-row v-if="transport">
-            <v-col cols="3">
+            <v-col cols="4">
               <v-select
                 v-model="form_pemesanan.tipe"
                 :items="daftar_tipe"
                 label="Type"
+                @change="handleChangeType"
                 persistent-hint
                 single-line
                 return-object
@@ -303,12 +304,15 @@ export default {
         this.calculatePrice();
       }
     },
-    handleChangeTransport(transport, index) {
+    handleChangeTransport(transport) {
       this.daftar_transport.forEach(element => {
         if (element == transport) {
           this.daftar_tipe = element.transports;
         }
       });
+    },
+    handleChangeType() {
+      this.calculatePrice();
     },
     calculatePrice() {
       let tanggalMulai = new Date(this.form_pemesanan.tanggal_mulai_pesanan);
@@ -318,6 +322,13 @@ export default {
       );
       this.form_pemesanan.harga_total =
         jumlahMalam * this.data_penginapan.harga_penginapan;
+      if (this.form_pemesanan.tipe == "large") {
+        this.form_pemesanan.harga_total += jumlahMalam * 100;
+      } else if (this.form_pemesanan.tipe == "medium") {
+        this.form_pemesanan.harga_total += jumlahMalam * 50;
+      } else if (this.form_pemesanan.tipe == "small") {
+        this.form_pemesanan.harga_total += jumlahMalam * 25;
+      }
     }
   },
   created() {
@@ -325,6 +336,15 @@ export default {
     this.form_pemesanan.notelp_pemesan = this.userProfile.notelp;
   },
   watch: {
+    transport: {
+      handler(val) {
+        if (!val) {
+          this.form_pemesanan.transport = "";
+          this.form_pemesanan.tipe = "";
+          this.calculatePrice();
+        }
+      }
+    },
     get_daftar_pemesanan: {
       immediate: true,
       handler() {
