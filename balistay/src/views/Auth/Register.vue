@@ -46,6 +46,30 @@
             single-line
             outlined
           ></v-select>
+
+          <v-text-field
+            v-if="form_register.role == 'transport'"
+            v-model="form_register.perusahaan_transport"
+            label="Company Name"
+            type="text"
+            :rules="[rules.required]"
+            outlined
+          ></v-text-field>
+
+          <v-select
+            v-if="form_register.role == 'transport'"
+            v-model="form_register.transports"
+            :rules="[rules.required]"
+            :items="transports"
+            item-text="text"
+            item-value="value"
+            label="Available Types"
+            persistent-hint
+            multiple
+            outlined
+            chips
+          ></v-select>
+
           <div class="button text-center">
             <v-btn
               elevation="0"
@@ -73,7 +97,9 @@ export default {
         password: "",
         nama: "",
         notelp: "",
-        role: "user"
+        role: "user",
+        perusahaan_transport: "",
+        transports: []
       },
 
       rules: {
@@ -89,6 +115,11 @@ export default {
         { text: "Default User", value: "user" },
         { text: "Owner", value: "owner" },
         { text: "Transport", value: "transport" }
+      ],
+      transports: [
+        { text: "Large (<=25 persons)", value: "large" },
+        { text: "Medium (<=15 persons)", value: "medium" },
+        { text: "Small (<=5 persons)", value: "small" }
       ]
     };
   },
@@ -119,6 +150,8 @@ export default {
             email: this.form_register.email,
             nama: this.form_register.nama,
             notelp: this.form_register.notelp,
+            perusahaan_transport: this.form_register.perusahaan_transport,
+            transports: this.form_register.transports,
             role: this.form_register.role
           };
         }

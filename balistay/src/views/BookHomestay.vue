@@ -69,6 +69,43 @@
           </v-row>
           <v-row>
             <v-col cols="3">
+              <v-checkbox
+                v-model="transport"
+                label="Use Transport"
+              ></v-checkbox>
+            </v-col>
+          </v-row>
+          <v-row v-if="transport">
+            <v-col cols="3">
+              <v-select
+                v-model="form_pemesanan.transport"
+                :items="daftar_transport"
+                item-text="perusahaan_transport"
+                item-value="id"
+                label="Transport Company"
+                @change="handleChangeTransport"
+                persistent-hint
+                single-line
+                return-object
+                outlined
+              ></v-select>
+            </v-col>
+          </v-row>
+          <v-row v-if="transport">
+            <v-col cols="3">
+              <v-select
+                v-model="form_pemesanan.tipe"
+                :items="daftar_tipe"
+                label="Type"
+                persistent-hint
+                single-line
+                return-object
+                outlined
+              ></v-select>
+            </v-col>
+          </v-row>
+          <v-row>
+            <v-col cols="3">
               <v-text-field
                 label="Price"
                 outlined
@@ -136,11 +173,16 @@ export default {
         tanggal_mulai_pesanan: "",
         tanggal_akhir_pesanan: "",
         metode_pembayaran: "ovo",
-        harga_total: 0
+        harga_total: 0,
+        transport: "",
+        tipe: ""
       },
       daftar_pemesanan: [],
       data_penginapan: [],
-      available: false
+      daftar_transport: [],
+      daftar_tipe: [],
+      available: false,
+      transport: false
     };
   },
   computed: {
@@ -163,6 +205,12 @@ export default {
         status_pembayaran: "waiting",
         user: firebase.db.collection("users").doc(this.currentUser.uid)
       };
+      if (this.transport) {
+        dataPemesanan.transport = firebase.db
+          .collection("users")
+          .doc(this.form_pemesanan.transport.id);
+        dataPemesanan.tipe = this.form_pemesanan.tipe;
+      }
       if (this.userProfile.role == "owner") {
         dataPemesanan.status_pembayaran = "paid";
       }
@@ -191,6 +239,19 @@ export default {
               .collection("penginapan")
               .doc(this.$route.params.id)
           });
+        if (this.transport) {
+          await firebase.db
+            .collection("users")
+            .doc(this.form_pemesanan.transport.id)
+            .collection("pemesanan")
+            .add({
+              pemesanan: firebase.db
+                .collection("penginapan")
+                .doc(this.$route.params.id)
+                .collection("pemesanan")
+                .doc(data.id)
+            });
+        }
       }
       this.$router.push(
         "/book-detail/" + this.$route.params.id + "+-+" + data.id
@@ -242,6 +303,13 @@ export default {
         this.calculatePrice();
       }
     },
+    handleChangeTransport(transport, index) {
+      this.daftar_transport.forEach(element => {
+        if (element == transport) {
+          this.daftar_tipe = element.transports;
+        }
+      });
+    },
     calculatePrice() {
       let tanggalMulai = new Date(this.form_pemesanan.tanggal_mulai_pesanan);
       let tanggalAkhir = new Date(this.form_pemesanan.tanggal_akhir_pesanan);
@@ -276,6 +344,15 @@ export default {
         this.$bind(
           "data_penginapan",
           firebase.db.collection("penginapan").doc(this.$route.params.id)
+        );
+      }
+    },
+    get_daftar_transport: {
+      immediate: true,
+      handler() {
+        this.$bind(
+          "daftar_transport",
+          firebase.db.collection("users").where("role", "==", "transport")
         );
       }
     }
