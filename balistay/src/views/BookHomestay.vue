@@ -250,7 +250,10 @@ export default {
                 .collection("penginapan")
                 .doc(this.$route.params.id)
                 .collection("pemesanan")
-                .doc(data.id)
+                .doc(data.id),
+              penginapan: firebase.db
+                .collection("penginapan")
+                .doc(this.$route.params.id)
             });
         }
       }
